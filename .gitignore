@@ -1,0 +1,19 @@
+#  Local .terraform directories
+**/.terraform/
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# .tfvars files
+*.tfvars
+
+.docker/
+.venv/
+__pycache__/
+*.coverage
+*.env
+*.iid
+*.zip
+.terraform.lock.hcl
+coverage.xml
