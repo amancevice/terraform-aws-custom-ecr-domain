@@ -17,10 +17,6 @@ Use CloudFront and Lambda@Edge to alias your registry with DNS:
 docker pull ecr.example.com/my-repo
 ```
 
-> This repo is based on and expands [naftulikay/terraform-aws-private-ecr-domain](https://github.com/naftulikay/terraform-aws-private-ecr-domain)
->
-> Pushing Docker images to ECR does not appear to be working
-
 ## Usage
 
 See the [example](./example) directory for an example project.
@@ -36,12 +32,13 @@ data "aws_route53_zone" "zone" {
 }
 
 module "custom-ecr-domain" {
-  source              = "amancevice/custom-ecr-domain/aws"
-  domain_name         = "ecr.example.com"
-  function_name       = "custom-ecr-edge"
-  registry            = "123456789012.dkr.ecr.us-west-2.amazonaws.com"
-  acm_certificate_arn = data.aws_acm_certificate.ssl.arn
-  route53_zone_id     = data.aws_route53_zone.zone.id
+  source                 = "amancevice/custom-ecr-domain/aws"
+  domain_name            = "ecr.example.com"
+  domain_certificate_arn = data.aws_acm_certificate.ssl.arn
+  domain_zone_id         = data.aws_route53_zone.zone.id
+  api_name               = "ecr.example.com"
+  function_name          = "ecr-redirect"
+  log_retention_in_days  = 14
 }
 ```
 

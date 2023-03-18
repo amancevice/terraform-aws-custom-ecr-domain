@@ -23,13 +23,6 @@ terraform {
 ###########
 
 provider "aws" {
-  region = "us-east-1"
-
-  default_tags { tags = { Name = "custom-ecr-domain" } }
-}
-
-provider "aws" {
-  alias  = "us-west-2"
   region = "us-west-2"
 
   default_tags { tags = { Name = "custom-ecr-domain" } }
@@ -41,23 +34,26 @@ data "aws_caller_identity" "current" {}
 #   CUSTOM ECR DOMAIN   #
 #########################
 
+variable "domain_name" { type = string }
+
 data "aws_acm_certificate" "ssl" {
-  domain   = "mancevice.dev"
+  domain   = var.domain_name
   statuses = ["ISSUED"]
 }
 
 data "aws_route53_zone" "zone" {
-  name = "mancevice.dev."
+  name = "${var.domain_name}."
 }
 
 module "custom-ecr-domain" {
   source = "./.."
 
-  domain_name         = "ecr.mancevice.dev"
-  function_name       = "mancevice-dev-ecr-edge"
-  registry            = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-west-2.amazonaws.com"
-  acm_certificate_arn = data.aws_acm_certificate.ssl.arn
-  route53_zone_id     = data.aws_route53_zone.zone.id
+  domain_name            = "ecr.${var.domain_name}"
+  domain_certificate_arn = data.aws_acm_certificate.ssl.arn
+  domain_zone_id         = data.aws_route53_zone.zone.id
+  api_name               = var.domain_name
+  function_name          = "${replace(var.domain_name, ".", "-")}-ecr-redirect"
+  log_retention_in_days  = 14
 }
 
 ############################
@@ -65,6 +61,5 @@ module "custom-ecr-domain" {
 ############################
 
 resource "aws_ecr_repository" "test" {
-  provider = aws.us-west-2
-  name     = "test"
+  name = "test"
 }
