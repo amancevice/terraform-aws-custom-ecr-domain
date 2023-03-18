@@ -11,7 +11,7 @@ Instead of:
 docker pull 123456789012.dkr.ecr.us-west-2.amazonaws.com/my-repo
 ```
 
-Use CloudFront and Lambda@Edge to alias your registry with DNS:
+Use API Gateway HTTP APIs and Lambda to alias your registry with DNS:
 
 ```bash
 docker pull ecr.example.com/my-repo
