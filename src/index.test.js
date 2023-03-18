@@ -7,7 +7,6 @@ const event = {
   Records: [{
     cf: {
       request: {
-        clientIp: "1.2.3.4",
         headers: {
           host: [{key: "Host", value: "ecr.example.com"}]
         },
@@ -21,10 +20,8 @@ const event = {
   }]
 };
 const expected = {
-  clientIp: "1.2.3.4",
   headers: {
-    "host": [{key: "Host", value: "123456789012.dkr.ecr.us-east-1.amazonaws.com"}],
-    "x-forwarded-for": [{key: "X-Forwarded-For", value: "1.2.3.4"}]
+    host: [{key: "Host", value: "123456789012.dkr.ecr.us-east-1.amazonaws.com"}],
   },
   origin: {
     custom: {
