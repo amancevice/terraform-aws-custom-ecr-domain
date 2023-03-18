@@ -3,23 +3,15 @@ on:
   pull_request:
   push:
 jobs:
-  pytest:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-node@v3
         with:
-          python-version: "3.9"
-      - uses: amancevice/setup-code-climate@v0
-        with:
-          cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
-      - run: cc-test-reporter before-build
-      - run: pip install pipenv
+          node-version: "18"
       - run: make test
-      - run: cc-test-reporter after-build
-        working-directory: python
-        if: ${{ github.event_name != 'pull_request' }}
-  terraform-validate:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

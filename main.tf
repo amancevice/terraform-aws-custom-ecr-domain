@@ -127,8 +127,8 @@ resource "aws_cloudfront_origin_request_policy" "default" {
 ###################
 
 data "archive_file" "package" {
-  source_file = "${path.module}/index.js"
-  output_path = "${path.module}/package.zip"
+  source_file = "${path.module}/src/index.js"
+  output_path = "${path.module}/src/package.zip"
   type        = "zip"
 }
 

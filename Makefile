@@ -4,6 +4,7 @@ clean:
 	rm -rf .terraform*
 
 test:
+	make -C src test
 
 validate: | .terraform
 	terraform fmt -check
