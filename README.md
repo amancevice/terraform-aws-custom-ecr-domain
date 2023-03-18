@@ -1,6 +1,7 @@
 # Custom DNS for ECR registry
 
-> This repo is based on and expands [naftulikay/terraform-aws-private-ecr-domain](https://github.com/naftulikay/terraform-aws-private-ecr-domain)
+[![terraform](https://img.shields.io/github/v/tag/amancevice/terraform-aws-custom-ecr-domain?color=62f&label=version&logo=terraform&style=flat-square)](https://registry.terraform.io/modules/amancevice/serverless-pypi/aws)
+[![test](https://img.shields.io/github/actions/workflow/status/amancevice/terraform-aws-custom-ecr-domain/test.yml?logo=github&style=flat-square)](https://github.com/amancevice/terraform-aws-custom-ecr-domain/actions/workflows/test.yml)
 
 Set up a custom DNS entry for a ECR.
 
@@ -16,6 +17,8 @@ Use CloudFront and Lambda@Edge to alias your registry with DNS:
 docker pull ecr.example.com/my-repo
 ```
 
+> This repo is based on and expands [naftulikay/terraform-aws-private-ecr-domain](https://github.com/naftulikay/terraform-aws-private-ecr-domain)
+>
 > Pushing Docker images to ECR does not appear to be working
 
 ## Usage
@@ -50,9 +53,20 @@ This repo provides a bash wrapper that can be used with a custom registry.
 
 To use the credential helper:
 
-  - Clone this repo
-  - Copy `bin/docker-credential-ecr-custom` somewhere on your `$PATH` (eg, `/usr/local/bin`)
-  - Update your Docker config `credHelpers` section:
+- Clone this repo
+- Copy `bin/docker-credential-ecr-custom` somewhere on your `$PATH` (eg, `/usr/local/bin`)
+- Create the config file `~/.ecr/custom.json` with mappings of your custom domains and ECR registries
+- Update your Docker config `credHelpers` section to use `ecr-custom`
+
+Example `~/.ecr/custom.json`:
+
+```json
+{
+  "ecr.example.com": "123456789012.dkr.ecr.us-east-1.amazonaws.com"
+}
+```
+
+Example `~/.docker/config.json` snippet:
 
 ```json
 {
@@ -60,5 +74,4 @@ To use the credential helper:
     "ecr.example.com": "ecr-custom"
   }
 }
-
 ```
