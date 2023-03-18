@@ -17,7 +17,7 @@ variable "distribution_comment" {
 variable "function_description" {
   description = "Lambda@Edge function description"
   type        = string
-  default     = "Rewrite Host header for incoming requests to ECR"
+  default     = "Enhance Docker requests for ECR"
 }
 
 variable "function_name" {
