@@ -41,7 +41,7 @@ data "aws_route53_zone" "zone" {
 
 module "custom-ecr-domain" {
   source                 = "amancevice/custom-ecr-domain/aws"
-  api_name               = "ecr.example.com"
+  api_name               = "ecr-proxy"
   domain_name            = "ecr.example.com"
   domain_certificate_arn = data.aws_acm_certificate.ssl.arn
   domain_zone_id         = data.aws_route53_zone.zone.id
