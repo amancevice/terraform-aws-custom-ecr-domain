@@ -17,6 +17,14 @@ Use API Gateway HTTP APIs and Lambda to alias your registry with DNS:
 docker pull ecr.example.com/my-repo
 ```
 
+## How
+
+[This post](https://httptoolkit.com/blog/docker-image-registry-facade/) describes why using a `CNAME` record alone won't work with a Docker registry.
+
+Instead, we will use a regional API Gateway HTTP API to proxy the request through a Lambda function that responds to ANY request with a [`307` temporary redirect](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/307), replacing the original request hostname with the configured ECR registry.
+
+The redirect will preserve the method and body of the original request, allowing us to push and pull Docker images with ECR as the backend.
+
 ## Usage
 
 See the [example](./example) directory for an example project.
@@ -33,20 +41,24 @@ data "aws_route53_zone" "zone" {
 
 module "custom-ecr-domain" {
   source                 = "amancevice/custom-ecr-domain/aws"
+  api_name               = "ecr.example.com"
   domain_name            = "ecr.example.com"
   domain_certificate_arn = data.aws_acm_certificate.ssl.arn
   domain_zone_id         = data.aws_route53_zone.zone.id
-  api_name               = "ecr.example.com"
   function_name          = "ecr-redirect"
   log_retention_in_days  = 14
 }
 ```
 
-## Credential Helper
+## Authentication
 
-AWS provides a [credential helper](https://github.com/awslabs/amazon-ecr-credential-helper) tool to authenticate between Docker and ECR, but this helper requires repositories use the AWS-style `123456789012.dkr.ecr.us-east-1.amazonaws.com` registry names.
+You can use the AWS CLI to generate passwords to pass to `docker login`, but using a [credential helper](https://docs.docker.com/engine/reference/commandline/login/) is a much easier way of using Docker & ECR.
 
-This repo provides a bash wrapper that can be used with a custom registry.
+AWS provides a [tool](https://github.com/awslabs/amazon-ecr-credential-helper) to authenticate between Docker and ECR, but this helper requires repositories use the AWS-style `123456789012.dkr.ecr.us-east-1.amazonaws.com` registry names.
+
+> _There is an open ticket ([#504](https://github.com/awslabs/amazon-ecr-credential-helper/pull/504)) to allow users to configure the offical tool to enale a default registry._
+
+This repo provides a wrapper script that can be used with a custom registry.
 
 To use the credential helper:
 
