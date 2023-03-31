@@ -1,6 +1,6 @@
 # Custom DNS for ECR registry
 
-[![terraform](https://img.shields.io/github/v/tag/amancevice/terraform-aws-custom-ecr-domain?color=62f&label=version&logo=terraform&style=flat-square)](https://registry.terraform.io/modules/amancevice/serverless-pypi/aws)
+[![terraform](https://img.shields.io/github/v/tag/amancevice/terraform-aws-custom-ecr-domain?color=62f&label=version&logo=terraform&style=flat-square)](https://registry.terraform.io/modules/amancevice/custom-ecr-domain/aws)
 [![test](https://img.shields.io/github/actions/workflow/status/amancevice/terraform-aws-custom-ecr-domain/test.yml?logo=github&style=flat-square)](https://github.com/amancevice/terraform-aws-custom-ecr-domain/actions/workflows/test.yml)
 
 Set up a custom DNS entry for a ECR.
