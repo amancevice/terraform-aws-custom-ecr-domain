@@ -148,6 +148,7 @@ resource "aws_iam_role" "proxy" {
 }
 
 resource "aws_lambda_function" "proxy" {
+  architectures    = ["arm64"]
   description      = var.function_description
   filename         = data.archive_file.proxy.output_path
   function_name    = var.function_name
