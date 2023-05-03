@@ -103,3 +103,13 @@ variable "function_runtime" {
   type        = string
   default     = "nodejs18.x"
 }
+
+###########
+#   ECR   #
+###########
+
+variable "ecr_regisitry" {
+  description = "ECR registry host"
+  type        = string
+  default     = null
+}

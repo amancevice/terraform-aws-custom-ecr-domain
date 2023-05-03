@@ -105,6 +105,11 @@ resource "aws_route53_record" "records" {
 #   LAMBDA   #
 ##############
 
+locals {
+  default_ecr_regstry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
+  ecr_registry        = coalesce(var.ecr_regisitry, local.default_ecr_regstry)
+}
+
 data "archive_file" "proxy" {
   source_file = "${path.module}/src/index.js"
   output_path = "${path.module}/src/package.zip"
@@ -153,9 +158,7 @@ resource "aws_lambda_function" "proxy" {
   source_code_hash = data.archive_file.proxy.output_base64sha256
 
   environment {
-    variables = {
-      AWS_ECR_REGISTRY = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
-    }
+    variables = { AWS_ECR_REGISTRY = local.ecr_registry }
   }
 }
 
