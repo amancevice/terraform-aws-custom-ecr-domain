@@ -108,7 +108,7 @@ variable "function_runtime" {
 #   ECR   #
 ###########
 
-variable "ecr_regisitry" {
+variable "ecr_registry" {
   description = "ECR registry host"
   type        = string
   default     = null
