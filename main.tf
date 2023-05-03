@@ -107,7 +107,7 @@ resource "aws_route53_record" "records" {
 
 locals {
   default_ecr_regstry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
-  ecr_registry        = coalesce(var.ecr_regisitry, local.default_ecr_regstry)
+  ecr_registry        = coalesce(var.ecr_registry, local.default_ecr_regstry)
 }
 
 data "archive_file" "proxy" {
