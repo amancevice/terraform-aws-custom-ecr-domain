@@ -8,7 +8,22 @@ provider "aws" {
   default_tags { tags = { Name = "custom-ecr-domain" } }
 }
 
+##############
+#   LOCALS   #
+##############
+
+locals {
+  region             = data.aws_region.current.name
+  function_name      = "${replace(var.domain_name, ".", "-")}-ecr-redirect"
+  function_role_name = "${local.region}-${local.function_name}"
+}
+
+############
+#   DATA   #
+############
+
 data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
 
 #########################
 #   CUSTOM ECR DOMAIN   #
@@ -32,7 +47,8 @@ module "custom-ecr-domain" {
   domain_certificate_arn = data.aws_acm_certificate.ssl.arn
   domain_zone_id         = data.aws_route53_zone.zone.id
   api_name               = var.domain_name
-  function_name          = "${replace(var.domain_name, ".", "-")}-ecr-redirect"
+  function_name          = local.function_name
+  function_role_name     = local.function_role_name
   log_retention_in_days  = 14
 }
 
