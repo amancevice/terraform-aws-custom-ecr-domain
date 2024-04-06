@@ -13,8 +13,10 @@ provider "aws" {
 ##############
 
 locals {
-  region             = data.aws_region.current.name
-  function_name      = "${replace(var.domain_name, ".", "-")}-ecr-redirect"
+  region = data.aws_region.current.name
+
+  api_name           = "example-custom-ecr-domain"
+  function_name      = local.api_name
   function_role_name = "${local.region}-${local.function_name}"
 }
 
@@ -46,7 +48,7 @@ module "custom-ecr-domain" {
   domain_name            = "ecr.${var.domain_name}"
   domain_certificate_arn = data.aws_acm_certificate.ssl.arn
   domain_zone_id         = data.aws_route53_zone.zone.id
-  api_name               = "ecr.${var.domain_name}"
+  api_name               = local.api_name
   function_name          = local.function_name
   function_role_name     = local.function_role_name
   log_retention_in_days  = 14
