@@ -18,9 +18,9 @@ terraform {
 ###########
 
 provider "aws" {
-  region = "us-east-1"
+  region = local.region
 
-  default_tags { tags = { Name = "custom-ecr-domain" } }
+  default_tags { tags = { Name = local.name } }
 }
 
 ##############
@@ -28,9 +28,10 @@ provider "aws" {
 ##############
 
 locals {
-  region = data.aws_region.current.name
+  region = "us-east-1"
+  name   = "custom-ecr-domain"
 
-  api_name           = "custom-ecr-domain"
+  api_name           = local.name
   function_name      = local.api_name
   function_role_name = "${local.region}-${local.function_name}"
 }
