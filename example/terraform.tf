@@ -1,9 +1,24 @@
+#################
+#   TERRAFORM   #
+#################
+
+terraform {
+  required_version = "~> 1.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 ###########
 #   AWS   #
 ###########
 
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-1"
 
   default_tags { tags = { Name = "custom-ecr-domain" } }
 }
@@ -15,7 +30,7 @@ provider "aws" {
 locals {
   region = data.aws_region.current.name
 
-  api_name           = "example-custom-ecr-domain"
+  api_name           = "custom-ecr-domain"
   function_name      = local.api_name
   function_role_name = "${local.region}-${local.function_name}"
 }
