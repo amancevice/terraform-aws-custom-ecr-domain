@@ -169,7 +169,6 @@ resource "aws_lambda_permission" "proxy" {
   source_arn    = "${aws_apigatewayv2_api.api.execution_arn}/$default/ANY/{proxy+}"
 }
 
-
 ############
 #   LOGS   #
 ############
