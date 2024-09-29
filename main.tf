@@ -133,18 +133,21 @@ resource "aws_iam_role" "proxy" {
       }
     }
   })
+}
 
-  inline_policy {
-    name = "logs"
-    policy = jsonencode({
-      Version = "2012-10-17"
-      Statement = {
-        Effect   = "Allow"
-        Action   = "logs:*"
-        Resource = "*"
-      }
-    })
-  }
+resource "aws_iam_role_policy" "proxy" {
+  name = "logs"
+  role = aws_iam_role.proxy.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = {
+      Sid      = "Logs"
+      Effect   = "Allow"
+      Action   = "logs:*"
+      Resource = "*"
+    }
+  })
 }
 
 resource "aws_lambda_function" "proxy" {
