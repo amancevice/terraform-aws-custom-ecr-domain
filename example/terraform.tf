@@ -77,3 +77,9 @@ module "custom-ecr-domain" {
 resource "aws_ecr_repository" "test" {
   name = "test"
 }
+
+###############
+#   OUTPUTS   #
+###############
+
+output "image" { value = "ecr.${var.domain_name}/${aws_ecr_repository.test.name}" }
