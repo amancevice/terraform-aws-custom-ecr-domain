@@ -101,7 +101,7 @@ variable "function_role_name" {
 variable "function_runtime" {
   description = "ECR custom domain proxy function runtime"
   type        = string
-  default     = "nodejs20.x"
+  default     = "nodejs22.x"
 }
 
 ###########
