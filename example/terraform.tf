@@ -38,7 +38,7 @@ locals {
 
   api_name           = local.name
   function_name      = local.api_name
-  function_role_name = "${local.region}-${local.function_name}"
+  function_role_name = "custom-ecr-domain-${local.region}-${local.function_name}"
 }
 
 ############
