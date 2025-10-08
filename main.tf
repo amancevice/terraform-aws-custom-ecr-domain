@@ -6,9 +6,14 @@ terraform {
   required_version = "~> 1.0"
 
   required_providers {
+    archive = {
+      source  = "hashicorp/archive"
+      version = "~> 2.7"
+    }
+
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
   }
 }
@@ -86,7 +91,7 @@ resource "aws_apigatewayv2_stage" "default" {
 resource "aws_route53_record" "records" {
   for_each       = toset(["A", "AAAA"])
   name           = aws_apigatewayv2_domain_name.api.domain_name
-  set_identifier = data.aws_region.current.name
+  set_identifier = data.aws_region.current.region
   type           = each.key
   zone_id        = var.domain_zone_id
 
@@ -97,7 +102,7 @@ resource "aws_route53_record" "records" {
   }
 
   latency_routing_policy {
-    region = data.aws_region.current.name
+    region = data.aws_region.current.region
   }
 }
 
@@ -106,7 +111,7 @@ resource "aws_route53_record" "records" {
 ##############
 
 locals {
-  default_ecr_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.name}.amazonaws.com"
+  default_ecr_registry = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${data.aws_region.current.region}.amazonaws.com"
   ecr_registry         = coalesce(var.ecr_registry, local.default_ecr_registry)
 }
 
